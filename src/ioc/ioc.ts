@@ -16,14 +16,12 @@ export class IoC{
   }
 
   public static setCurrenScope( scope: string ) {
-    // IoC.currentScope = scope;
     IoC.storage.enterWith({
       currentScope: scope
     });
   }
 
   public static getCurrentScope() {
-    // return IoC.currentScope;
     return IoC.storage.getStore().currentScope;
   }
 
