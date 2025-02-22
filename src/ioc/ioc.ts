@@ -1,6 +1,3 @@
-import { Point } from '../point';
-import { StraightMoveCommand } from '../straight-move-command';
-import { TeleportationCommand } from '../teleportation-command';
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 export type Fn = (...args: any[]) => any
@@ -11,38 +8,41 @@ export class IoC{
   
   private static defaultScope = 'default';
   private static dependencies: Map<string, Map<string, Fn>>;
-  private static currentScope;
 
-  private static asyncLocalStorage;
+  private static storage;
 
   public static getDefaultScopeName() {
     return IoC.defaultScope;
   }
 
   public static setCurrenScope( scope: string ) {
-    IoC.currentScope = scope;
+    // IoC.currentScope = scope;
+    IoC.storage.enterWith({
+      currentScope: scope
+    });
   }
 
   public static getCurrentScope() {
-    return IoC.currentScope;
+    // return IoC.currentScope;
+    return IoC.storage.getStore().currentScope;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   public static init( dependencies ) {
+    IoC.storage = new AsyncLocalStorage<object>();
     IoC.dependencies = dependencies;
-    IoC.currentScope = IoC.defaultScope;
-    IoC.asyncLocalStorage = new AsyncLocalStorage();
+    IoC.setCurrenScope(IoC.defaultScope);
   }
 
   public static getCurrentScopeDependencies() {
     if(!IoC.dependencies) {
       return null;
     }
-    const currentScopeDependencies = IoC.dependencies.get(IoC.currentScope);
+    const currentScopeDependencies = IoC.dependencies.get(IoC.getCurrentScope());
     if(!currentScopeDependencies) {
-      IoC.dependencies.set(IoC.currentScope, new Map<string, Fn>());
+      IoC.dependencies.set(IoC.getCurrentScope(), new Map<string, Fn>());
     }
-    return IoC.dependencies.get(IoC.currentScope);
+    return IoC.dependencies.get(IoC.getCurrentScope());
   }
 
   static getRootScopeDependencies() {

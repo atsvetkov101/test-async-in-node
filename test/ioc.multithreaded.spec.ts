@@ -1,4 +1,4 @@
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import { IoC } from '../src/ioc/ioc';
 import { InitCommand } from '../src/scopes/init-command';
 
