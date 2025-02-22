@@ -4,8 +4,8 @@ import { main } from '../src';
 
 describe('Index module', function() {
   describe('expected behavior', function() {
-    it('should return hello world', function() {
-      expect(main()).to.equal('Hello World');
+    it('should return Выполнение завершено', function() {
+      expect(main()).to.equal('Выполнение завершено');
     });
   });
 });
