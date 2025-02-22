@@ -2,6 +2,7 @@ import { expect, assert } from 'chai';
 import { IoC } from '../src/ioc/ioc';
 import { InitCommand } from '../src/scopes/init-command';
 
+const timeout = 50;
 const setAndCheckScopeFunc = async (scope) => {
   return new Promise((resolve, reject) => {
     IoC.Resolve('IoC.Scope.Current.Set', scope).execute();
@@ -16,7 +17,7 @@ const setAndCheckScopeFunc = async (scope) => {
         resolve(currentScope);
       }
     },
-    1000);
+    timeout);
   });
 };
 
@@ -38,7 +39,7 @@ describe('Тесты для многопоточности для IoC', function
             resolve(currentScope);
           }
         },
-        1000);
+        timeout);
       });
       
       const res = await Promise.all([func1]);
